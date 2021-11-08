@@ -11,7 +11,7 @@ class Instrument { // Like a Player
     }
 
     describe() {
-        console.log(`${this.instrumentName} is in the ${this.section}`)
+        console.log(`${this.instrumentName} is in the ${this.section} Section`)
     }
 }
 
