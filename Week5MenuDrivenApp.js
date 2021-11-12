@@ -11,7 +11,7 @@ class Instrument { // Like a Player
     }
 
     describe() {
-        console.log(`${this.instrumentName} is in the ${this.section} Section`)
+        return `${this.instrumentName} in the ${this.section} Section`;
     }
 }
 
@@ -31,8 +31,11 @@ class Musician { // Like a Team
     }
 
     describe() {
-        console.log(`${this.name} plays ${this.instruments.length} instruments.`);
-        // POSSIBLY:  write a loop to get all of the instrument)
+        if (this.instruments.length == 1) {
+            return `${this.name} plays ${this.instruments.length} instrument.`;
+        }  else {
+            return `${this.name} plays ${this.instruments.length} instruments.`;
+        }
     }
 }
 
@@ -87,7 +90,7 @@ class Menu { // Menu class
         return prompt(`
         Individual Musician Menu:
         ------------------------------------
-            0) Return to Musician Menu
+            0) Return to Musician Main Menu
             1) Add a new Instrument
             2) Delete an Instrument
         ------------------------------------
@@ -98,35 +101,48 @@ class Menu { // Menu class
     displayMusicians() {
         let musicianString = '';
         for (let i = 0; i < this.musicians.length; i++) {
-            musicianString += i+ ') ' + this.musicians[i].name + '\n';
+            musicianString += i+ ') ' + this.musicians[i].describe() + '\n';
         }
-        alert(musicianString);
+        alert("All Musicians:\n"+ musicianString);
     }
 
     createMusician() {
         let name = prompt('Enter the name for new Musician: ');
         this.musicians.push(new Musician(name));
+        console.log("Musician has been created!")
     }
 
     viewMusician() {
         let index = prompt("Enter the index of the Musician that you want to view:");
         if (index > -1  && index < this.musicians.length) {
             this.selectedMusician = this.musicians[index];
-            let description = "\n Musician Name: " + this.selectedMusician.name + "\n";
+            console.log(`Chosen musician: ${this.selectedMusician.describe()}`);
+            var newSelect1 = 0;
+            do {
+                let description = "\n Musician Name: " + this.selectedMusician.name + "\n";
+                if (this.selectedMusician.instruments.length >0) {
+                    description += "\tInstruments:\n";
+                }
+                for (let i = 0; i < this.selectedMusician.instruments.length; i++) {
+                    console.log(this.selectedMusician.describe());
+                   description +=  `\t\t  ${i})  ${this.selectedMusician.instruments[i].describe()} \n`; 
+                }
             
-            for (let i = 0; i < this.selectedMusician.instruments.length; i++) {
-                description +=  '\t\t' + i + ') ' + this.selectedMusician.instruments[i].instrumentName 
-                    + ' - ' + this.selectedMusician.instruments[i].section + ' Section \n';
-            }
-
-            let selection1 = this.showMusicianMenuOptions(description);
-            switch (selection1) {
-                case '1' : 
-                    this.createInstrument();
-                    break;
-                case '2' :
-                    this.deleteInstrument();
-            }
+           
+                var selection1 = this.showMusicianMenuOptions(description);
+                if (selection1 >= 0 && selection1 <=2 ) {
+                    switch (selection1) {
+                        case '1' : 
+                            this.createInstrument();
+                            break;
+                        case '2' :
+                            this.deleteInstrument();
+                    }
+                } else {
+                    console.log("Invalid Selection!");
+                }    
+                newSelect1 = selection1;
+            } while (newSelect1 != 0); // end of while   
 
         } else {
             throw new Error(`Index: ${index} is an invalid Musician's index!`);
@@ -140,6 +156,7 @@ class Menu { // Menu class
         }  else {
             throw new Error(`Index: ${index} is an invalid Musician's index!`);
         }  // validate user input
+        console.log("Musician has been deleted!")
     }
 
 
@@ -147,6 +164,8 @@ class Menu { // Menu class
         let name = prompt('Enter name for new instrument: ');
         let section = prompt('Enter section for new instrument: ');
         this.selectedMusician.instruments.push(new Instrument(name, section));
+        console.log(this.selectedMusician.describe() + "\n\tInstrument has been created!")
+
     }
 
     deleteInstrument() {
@@ -156,6 +175,7 @@ class Menu { // Menu class
         } else {
             throw new Error(`Index: ${index} is an invalid Instrument index!`);
         }
+        console.log(this.selectedMusician.describe() + "\n\tInstrument has been deleted!")
     }
 
 }
