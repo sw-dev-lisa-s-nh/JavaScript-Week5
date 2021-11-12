@@ -145,7 +145,8 @@ class Menu { // Menu class
             } while (newSelect1 != 0); // end of while   
 
         } else {
-            throw new Error(`Index: ${index} is an invalid Musician's index!`);
+            console.log(`Index: ${index} is an invalid Musician's index!`);
+            alert(`Index: ${index} is an invalid Musician's index!`);
         }  // validate user input
     }
 
